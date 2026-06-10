@@ -1,0 +1,14 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built by `go test`
+*.test
+
+# Output of the go coverage tool, handy when working with CI/CD
+*.out
+
+.env
