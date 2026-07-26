@@ -7,6 +7,7 @@ interface Lead {
   phone: string;
   status: string;
   notes: string;
+  
 }
 
 export default function App() {
