@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"os"
 
@@ -45,14 +47,20 @@ func main() {
 			return
 		}
 
-		// Log the ingestion metrics (Crucial talking point for scale in interviews)
-		println("Successfully ingested message from: " + payload.Phone + " | Content: " + payload.Message)
+		println("⚡ [Go Ingestion Engine] Ingested message from: " + payload.Phone + " | Content: " + payload.Message)
 
-		// TODO: In Phase 2, this payload goes straight into Redis Queue
+		// Push payload straight into Redis BullMQ Queue via NestJS Queue Producer
+		jsonBytes, err := json.Marshal(payload)
+		if err == nil {
+			resp, httpErr := http.Post("http://localhost:3000/crm/webhook-ingest", "application/json", bytes.NewBuffer(jsonBytes))
+			if httpErr == nil && resp != nil {
+				defer resp.Body.Close()
+			}
+		}
 		
 		c.JSON(http.StatusAccepted, gin.H{
 			"status":  "queued",
-			"message": "Message received by Go engine safely",
+			"message": "Message received by Go engine safely & enqueued into Redis BullMQ",
 		})
 	})
 
