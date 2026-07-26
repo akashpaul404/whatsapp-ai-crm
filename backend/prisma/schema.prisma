@@ -1,10 +1,10 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  moduleFormat    = "cjs"
 }
 
 enum LeadStatus {
@@ -17,21 +17,43 @@ enum LeadStatus {
 }
 
 model Lead {
-  id        String      @id @default(uuid())
-  phone     String      @unique
-  name      String
-  status    LeadStatus  @default(NEW)
-  notes     String?
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  logs      ActionLog[]
+  id           String        @id @default(uuid())
+  phone        String        @unique
+  name         String
+  status       LeadStatus    @default(NEW)
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  logs         ActionLog[]
+  chatMessages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  phone     String
+  leadId    String?
+  lead      Lead?    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  role      String   // "user" | "assistant"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+model KnowledgeBase {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
 }
 
 model ActionLog {
-  id           String   @id @default(uuid())
+  id           String     @id @default(uuid())
   leadId       String
-  lead         Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  actionType   String   
-  previousData Json     
-  createdAt    DateTime @default(now())
+  lead         Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  actionType   String
+  intent       String     @default("UNKNOWN")
+  confidence   Float      @default(0)
+  rawMessage   String     @default("") @db.Text
+  previousData Json
+  createdAt    DateTime   @default(now())
 }
