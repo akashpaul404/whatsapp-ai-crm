@@ -6,10 +6,12 @@
     "dev": "ts-node src/main.ts"
   },
   "dependencies": {
+    "@nestjs/bullmq": "^11.0.4",
     "@nestjs/core": "^11.1.26",
     "@nestjs/platform-express": "^11.1.28",
     "@prisma/client": "^7.8.0",
     "@prisma/config": "^7.8.0",
+    "bullmq": "^5.81.2",
     "dotenv": "^17.4.2",
     "ioredis": "^5.11.1"
   },

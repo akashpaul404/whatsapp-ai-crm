@@ -1,11 +1,18 @@
 import { Module } from '@nestjs/common';
-import { CRMController } from './crm/crm.controller';
-import { CRMService } from './crm/crm.service';
-import { QueueProcessorService } from './queue/queue-processor.service';
+import { BullModule } from '@nestjs/bullmq';
+import { QueueModule } from './queue/queue.module';
+import { CRMModule } from './crm/crm.module';
+import Redis from 'ioredis';
 
 @Module({
-  imports: [],
-  controllers: [CRMController],
-  providers: [CRMService, QueueProcessorService],
+  imports: [
+    BullModule.forRoot({
+      connection: new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+        maxRetriesPerRequest: null,
+      }),
+    }),
+    QueueModule,
+    CRMModule,
+  ],
 })
 export class AppModule {}
