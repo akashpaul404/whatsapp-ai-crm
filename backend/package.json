@@ -2,18 +2,27 @@
   "name": "backend",
   "version": "0.0.1",
   "scripts": {
-    "start": "ts-node src/main.ts",
-    "dev": "ts-node src/main.ts"
+    "start": "npx -y tsx src/main.ts",
+    "dev": "npx -y tsx watch src/main.ts",
+    "dev:go": "cd ingestion-go && go run github.com/air-verse/air@latest",
+    "test": "npx -y tsx test/multi-turn-chat.test.ts",
+    "test:redis": "npx -y tsx test/redis-db-crm.test.ts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/core": "^11.1.26",
     "@nestjs/platform-express": "^11.1.28",
+    "@nestjs/platform-socket.io": "^11.0.10",
+    "@nestjs/websockets": "^11.0.10",
+    "@prisma/adapter-neon": "^7.9.0",
     "@prisma/client": "^7.8.0",
     "@prisma/config": "^7.8.0",
     "bullmq": "^5.81.2",
     "dotenv": "^17.4.2",
-    "ioredis": "^5.11.1"
+    "groq-sdk": "^0.15.0",
+    "ioredis": "^5.11.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/node": "^25.9.2",

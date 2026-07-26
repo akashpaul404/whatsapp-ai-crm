@@ -19,3 +19,4 @@ Thumbs.db
 *.db
 *.db-journal
 package-lock.json
+*.md

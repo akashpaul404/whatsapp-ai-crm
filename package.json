@@ -1,0 +1,14 @@
+{
+  "name": "whatsapp-ai-crm-root",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:go": "npm run dev:go --workspace=backend",
+    "test:redis": "npm run test:redis --workspace=backend"
+  }
+}
